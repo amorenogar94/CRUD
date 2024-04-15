@@ -4,6 +4,8 @@ import { Home } from '../components/home/Home';
 
 import { EditUser } from '../components/editUser/EditUser';
 import { AddUser } from '../components/addUser/AddUser';
+import { HomeEx } from '../components/home/HomeEx';
+import { AddUserEx } from '../components/addUser/AddUserEx'; // Importar AddUserEx
 
 const AppRoutes = () => {
 	return (

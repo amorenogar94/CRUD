@@ -18,7 +18,7 @@ export const AddUser = ({ open, onClose, onSubmit }) => {
 		email: '',
 	});
 	const [successMessage, setSuccessMessage] = useState('');
-	const [errorMessage, setErrorMessage] = useState('');
+	const [emailError, setEmailError] = useState('');
 	const [snackbarOpen, setSnackbarOpen] = useState(false);
 
 	const handleChange = (event) => {
@@ -27,13 +27,45 @@ export const AddUser = ({ open, onClose, onSubmit }) => {
 			...userData,
 			[name]: value,
 		});
+
+		if (name === 'email') {
+			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+			if (!emailRegex.test(value)) {
+				setEmailError(
+					'Por favor ingresa un correo electrónico válido.'
+				);
+			} else {
+				setEmailError('');
+			}
+		}
+	};
+
+	const validateForm = () => {
+		const { name, lastName, age, email } = userData;
+
+		if (!name || !lastName || !age || !email) {
+			setSnackbarOpen(true);
+			setSuccessMessage('');
+			return false;
+		}
+
+		if (emailError) {
+			setSnackbarOpen(true);
+			setSuccessMessage('');
+			return false;
+		}
+
+		return true;
 	};
 
 	const handleSubmit = async () => {
+		if (!validateForm()) {
+			return;
+		}
+
 		try {
 			await onSubmit(userData);
 			setSuccessMessage('Usuario agregado con éxito');
-			setErrorMessage('');
 			setSnackbarOpen(true);
 			setUserData({
 				name: '',
@@ -43,10 +75,14 @@ export const AddUser = ({ open, onClose, onSubmit }) => {
 			});
 		} catch (error) {
 			console.error('Error al agregar usuario:', error);
-			setErrorMessage('Error al agregar usuario');
 			setSuccessMessage('');
-			setSnackbarOpen(true);
 		}
+	};
+
+	const clearErrors = () => {
+		setEmailError('');
+		setSuccessMessage('');
+		setSnackbarOpen(false);
 	};
 
 	const handleCloseSnackbar = () => {
@@ -54,6 +90,7 @@ export const AddUser = ({ open, onClose, onSubmit }) => {
 	};
 
 	const handleCloseDialog = () => {
+		clearErrors();
 		setUserData({
 			name: '',
 			lastName: '',
@@ -79,6 +116,7 @@ export const AddUser = ({ open, onClose, onSubmit }) => {
 					value={userData.name}
 					onChange={handleChange}
 					fullWidth
+					required
 				/>
 				<TextField
 					margin="dense"
@@ -87,6 +125,7 @@ export const AddUser = ({ open, onClose, onSubmit }) => {
 					value={userData.lastName}
 					onChange={handleChange}
 					fullWidth
+					required
 				/>
 				<TextField
 					margin="dense"
@@ -96,6 +135,7 @@ export const AddUser = ({ open, onClose, onSubmit }) => {
 					value={userData.age}
 					onChange={handleChange}
 					fullWidth
+					required
 				/>
 				<TextField
 					margin="dense"
@@ -105,6 +145,9 @@ export const AddUser = ({ open, onClose, onSubmit }) => {
 					value={userData.email}
 					onChange={handleChange}
 					fullWidth
+					required
+					error={!!emailError}
+					helperText={emailError}
 				/>
 			</DialogContent>
 			<DialogActions>
@@ -115,13 +158,12 @@ export const AddUser = ({ open, onClose, onSubmit }) => {
 					Agregar
 				</Button>
 			</DialogActions>
-			<Snackbar
-				open={snackbarOpen}
-				autoHideDuration={6000}
-				onClose={handleCloseSnackbar}
-			>
+			<Snackbar open={snackbarOpen} onClose={handleCloseSnackbar}>
 				<SnackbarContent
-					message={successMessage || errorMessage}
+					message={
+						successMessage ||
+						'Por favor completa todos los campos (*).'
+					}
 					style={{
 						backgroundColor: successMessage ? 'green' : 'red',
 					}}
