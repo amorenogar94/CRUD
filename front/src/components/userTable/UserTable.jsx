@@ -26,6 +26,15 @@ const styles = (theme) => ({
 	},
 });
 
+const headers = [
+	{ label: 'ID', align: 'center', field: 'id' },
+	{ label: 'Name', align: 'center', field: 'name' },
+	{ label: 'Last Name', align: 'center', field: 'lastName' },
+	{ label: 'Age', align: 'center', field: 'age' },
+	{ label: 'Email', align: 'center', field: 'email' },
+	{ label: 'Actions', align: 'center', actions: true },
+];
+
 const UserTable = ({ users, onEdit, onDelete, classes }) => {
 	return (
 		<div className={classes.tableWrapper}>
@@ -33,46 +42,42 @@ const UserTable = ({ users, onEdit, onDelete, classes }) => {
 				<Table className={classes.table} aria-label="user table">
 					<TableHead>
 						<TableRow>
-							<TableCell align="center">ID</TableCell>
-							<TableCell align="center">Name</TableCell>
-							<TableCell align="center">Last Name</TableCell>
-							<TableCell align="center">Age</TableCell>
-							<TableCell align="center">Email</TableCell>
-							<TableCell align="center">Actions</TableCell>
+							{headers.map((header, index) => (
+								<TableCell key={index} align={header.align}>
+									{header.label}
+								</TableCell>
+							))}
 						</TableRow>
 					</TableHead>
 					<TableBody>
 						{users.map((user) => (
 							<TableRow key={user.id}>
-								<TableCell align="center">{user.id}</TableCell>
-								<TableCell align="center">
-									{user.name}
-								</TableCell>
-								<TableCell align="center">
-									{user.lastName}
-								</TableCell>
-								<TableCell align="center">{user.age}</TableCell>
-								<TableCell align="center">
-									{user.email}
-								</TableCell>
-								<TableCell align="center">
-									<div className={classes.actionCell}>
-										<IconButton
-											color="primary"
-											aria-label="edit user"
-											onClick={() => onEdit(user)}
-										>
-											<EditIcon />
-										</IconButton>
-										<IconButton
-											color="secondary"
-											aria-label="delete user"
-											onClick={() => onDelete(user.id)}
-										>
-											<DeleteIcon />
-										</IconButton>
-									</div>
-								</TableCell>
+								{headers.map((header, index) => (
+									<TableCell key={index} align={header.align}>
+										{header.actions ? (
+											<div className={classes.actionCell}>
+												<IconButton
+													color="primary"
+													aria-label="edit user"
+													onClick={() => onEdit(user)}
+												>
+													<EditIcon />
+												</IconButton>
+												<IconButton
+													color="secondary"
+													aria-label="delete user"
+													onClick={() =>
+														onDelete(user.id)
+													}
+												>
+													<DeleteIcon />
+												</IconButton>
+											</div>
+										) : (
+											user[header.field]
+										)}
+									</TableCell>
+								))}
 							</TableRow>
 						))}
 					</TableBody>
