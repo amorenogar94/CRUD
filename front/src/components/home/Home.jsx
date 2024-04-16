@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './Home.css';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import AppBar from '@material-ui/core/AppBar';
@@ -18,7 +19,6 @@ export const Home = () => {
 		'http://localhost:9090/users/',
 		'GET'
 	);
-
 	const [snackbarOpen, setSnackbarOpen] = useState(false);
 	const [snackbarMessage, setSnackbarMessage] = useState('');
 	const [snackbarSeverity, setSnackbarSeverity] = useState('success');
@@ -113,7 +113,7 @@ export const Home = () => {
 	};
 
 	return (
-		<div>
+		<div className="home">
 			<AppBar position="static" color="default">
 				<Toolbar>
 					<Typography variant="h6" color="inherit">
@@ -121,35 +121,25 @@ export const Home = () => {
 					</Typography>
 				</Toolbar>
 			</AppBar>
-			<div
-				style={{
-					width: '80%',
-					margin: '0 auto',
-					marginTop: 50,
-				}}
-			>
+			<div className="content">
 				<Paper>
-					<div
-						style={{
-							minHeight: 200,
-							padding: 25,
-						}}
-					>
-						<Typography
-							variant="title"
-							color="inherit"
-							style={{ display: 'inline' }}
-						>
-							Listado de usuarios
-						</Typography>
-						<Button
-							color="primary"
-							variant="contained"
-							style={{ marginLeft: 20 }}
-							onClick={() => setOpenDialog(true)}
-						>
-							Agregar Usuario
-						</Button>
+					<div className="wrapper">
+						<div className="header">
+							<Typography
+								variant="title"
+								color="inherit"
+								className="title"
+							>
+								Listado de usuarios
+							</Typography>
+							<Button
+								color="primary"
+								variant="contained"
+								onClick={() => setOpenDialog(true)}
+							>
+								Agregar Usuario
+							</Button>
+						</div>
 						<AddUser
 							open={openDialog}
 							onClose={handleCloseDialog}

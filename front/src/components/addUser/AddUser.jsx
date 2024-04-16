@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import useFormValidation from '../../hooks/useFormValidation';
 import {
 	Dialog,
 	DialogTitle,
@@ -11,52 +12,26 @@ import {
 } from '@material-ui/core';
 
 export const AddUser = ({ open, onClose, onSubmit }) => {
-	const [userData, setUserData] = useState({
+	const initialUserData = {
 		name: '',
 		lastName: '',
 		age: '',
 		email: '',
-	});
-	const [successMessage, setSuccessMessage] = useState('');
-	const [emailError, setEmailError] = useState('');
-	const [snackbarOpen, setSnackbarOpen] = useState(false);
-
-	const handleChange = (event) => {
-		const { name, value } = event.target;
-		setUserData({
-			...userData,
-			[name]: value,
-		});
-
-		if (name === 'email') {
-			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-			if (!emailRegex.test(value)) {
-				setEmailError(
-					'Por favor ingresa un correo electrónico válido.'
-				);
-			} else {
-				setEmailError('');
-			}
-		}
 	};
 
-	const validateForm = () => {
-		const { name, lastName, age, email } = userData;
-
-		if (!name || !lastName || !age || !email) {
-			setSnackbarOpen(true);
-			setSuccessMessage('');
-			return false;
-		}
-
-		if (emailError) {
-			setSnackbarOpen(true);
-			setSuccessMessage('');
-			return false;
-		}
-
-		return true;
-	};
+	const {
+		userData,
+		emailError,
+		handleChange,
+		validateForm,
+		clearErrors,
+		resetForm,
+		snackbarOpen,
+		snackbarMessage,
+		snackbarSeverity,
+		showSuccessMessage,
+		showErrorMessage,
+	} = useFormValidation(initialUserData);
 
 	const handleSubmit = async () => {
 		if (!validateForm()) {
@@ -65,38 +40,22 @@ export const AddUser = ({ open, onClose, onSubmit }) => {
 
 		try {
 			await onSubmit(userData);
-			setSuccessMessage('Usuario agregado con éxito');
-			setSnackbarOpen(true);
-			setUserData({
-				name: '',
-				lastName: '',
-				age: '',
-				email: '',
-			});
+			showSuccessMessage('Usuario agregado con éxito');
+			resetForm();
+			onClose();
 		} catch (error) {
 			console.error('Error al agregar usuario:', error);
-			setSuccessMessage('');
+			showErrorMessage('Error al agregar usuario');
 		}
 	};
 
-	const clearErrors = () => {
-		setEmailError('');
-		setSuccessMessage('');
-		setSnackbarOpen(false);
-	};
-
 	const handleCloseSnackbar = () => {
-		setSnackbarOpen(false);
+		clearErrors();
 	};
 
 	const handleCloseDialog = () => {
 		clearErrors();
-		setUserData({
-			name: '',
-			lastName: '',
-			age: '',
-			email: '',
-		});
+		resetForm();
 		onClose();
 	};
 
@@ -158,14 +117,16 @@ export const AddUser = ({ open, onClose, onSubmit }) => {
 					Agregar
 				</Button>
 			</DialogActions>
-			<Snackbar open={snackbarOpen} onClose={handleCloseSnackbar}>
+			<Snackbar
+				open={snackbarOpen}
+				autoHideDuration={6000}
+				onClose={handleCloseSnackbar}
+			>
 				<SnackbarContent
-					message={
-						successMessage ||
-						'Por favor completa todos los campos (*).'
-					}
+					message={snackbarMessage}
 					style={{
-						backgroundColor: successMessage ? 'green' : 'red',
+						backgroundColor:
+							snackbarSeverity === 'success' ? 'green' : 'red',
 					}}
 				/>
 			</Snackbar>

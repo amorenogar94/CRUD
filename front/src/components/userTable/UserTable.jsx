@@ -14,54 +14,63 @@ const styles = (theme) => ({
 	table: {
 		minWidth: 650,
 	},
+	tableWrapper: {
+		overflowX: 'auto',
+	},
 });
 
 const UserTable = ({ users, onEdit, onDelete, classes }) => {
 	return (
-		<Paper style={{ marginTop: 20 }}>
-			<Table className={classes.table} aria-label="user table">
-				<TableHead>
-					<TableRow>
-						<TableCell align="center">ID</TableCell>
-						<TableCell align="center">Name</TableCell>
-						<TableCell align="center">Last Name</TableCell>
-						<TableCell align="center">Age</TableCell>
-						<TableCell align="center">Email</TableCell>
-						<TableCell align="center">Actions</TableCell>
-					</TableRow>
-				</TableHead>
-				<TableBody>
-					{users.map((user) => (
-						<TableRow key={user.id}>
-							<TableCell align="center">{user.id}</TableCell>
-							<TableCell align="center">{user.name}</TableCell>
-							<TableCell align="center">
-								{user.lastName}
-							</TableCell>
-							<TableCell align="center">{user.age}</TableCell>
-							<TableCell align="center">{user.email}</TableCell>
-							<TableCell align="center">
-								<IconButton
-									color="primary"
-									aria-label="edit user"
-									onClick={() => onEdit(user)}
-								>
-									<EditIcon />
-								</IconButton>
-								<IconButton
-									color="secondary"
-									aria-label="delete user"
-									onClick={() => onDelete(user.id)}
-									style={{ marginLeft: 8 }}
-								>
-									<DeleteIcon />
-								</IconButton>
-							</TableCell>
+		<div className={classes.tableWrapper}>
+			<Paper>
+				<Table className={classes.table} aria-label="user table">
+					<TableHead>
+						<TableRow>
+							<TableCell align="center">ID</TableCell>
+							<TableCell align="center">Name</TableCell>
+							<TableCell align="center">Last Name</TableCell>
+							<TableCell align="center">Age</TableCell>
+							<TableCell align="center">Email</TableCell>
+							<TableCell align="center">Actions</TableCell>
 						</TableRow>
-					))}
-				</TableBody>
-			</Table>
-		</Paper>
+					</TableHead>
+					<TableBody>
+						{users.map((user) => (
+							<TableRow key={user.id}>
+								<TableCell align="center">{user.id}</TableCell>
+								<TableCell align="center">
+									{user.name}
+								</TableCell>
+								<TableCell align="center">
+									{user.lastName}
+								</TableCell>
+								<TableCell align="center">{user.age}</TableCell>
+								<TableCell align="center">
+									{user.email}
+								</TableCell>
+								<TableCell align="center">
+									<IconButton
+										color="primary"
+										aria-label="edit user"
+										onClick={() => onEdit(user)}
+									>
+										<EditIcon />
+									</IconButton>
+									<IconButton
+										color="secondary"
+										aria-label="delete user"
+										onClick={() => onDelete(user.id)}
+										style={{ marginLeft: 8 }}
+									>
+										<DeleteIcon />
+									</IconButton>
+								</TableCell>
+							</TableRow>
+						))}
+					</TableBody>
+				</Table>
+			</Paper>
+		</div>
 	);
 };
 

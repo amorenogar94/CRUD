@@ -8,11 +8,12 @@ import {
 	TextField,
 	Snackbar,
 	SnackbarContent,
+	Paper,
 } from '@material-ui/core';
 import { useNavigate } from 'react-router-dom';
 import { HomeEx } from '../home/HomeEx';
 
-export const AddUserEx = ({ open = true, onClose, onSubmit }) => {
+export const AddUserEx = ({ onSubmit }) => {
 	const [userData, setUserData] = useState({
 		name: '',
 		lastName: '',
@@ -45,7 +46,7 @@ export const AddUserEx = ({ open = true, onClose, onSubmit }) => {
 				age: '',
 				email: '',
 			});
-			onClose();
+			// onClose();
 			navigate('/');
 		} catch (error) {
 			console.error('Error al agregar usuario:', error);
@@ -73,72 +74,78 @@ export const AddUserEx = ({ open = true, onClose, onSubmit }) => {
 	return (
 		<>
 			{/* <HomeEx></HomeEx> */}
-			<Dialog
-				open={open} // Usar la prop open
-				onClose={handleCloseDialog}
-				aria-labelledby="form-dialog-title"
+			<div
+				style={{
+					width: '80%',
+					margin: '0 auto',
+					marginTop: 50,
+				}}
 			>
-				<DialogTitle id="form-dialog-title">
-					Agregar Usuario
-				</DialogTitle>
-				<DialogContent>
-					<TextField
-						autoFocus
-						margin="dense"
-						label="Nombre"
-						name="name"
-						value={userData.name}
-						onChange={handleChange}
-						fullWidth
-					/>
-					<TextField
-						margin="dense"
-						label="Apellido"
-						name="lastName"
-						value={userData.lastName}
-						onChange={handleChange}
-						fullWidth
-					/>
-					<TextField
-						margin="dense"
-						label="Edad"
-						name="age"
-						type="number"
-						value={userData.age}
-						onChange={handleChange}
-						fullWidth
-					/>
-					<TextField
-						margin="dense"
-						label="Email"
-						name="email"
-						type="email"
-						value={userData.email}
-						onChange={handleChange}
-						fullWidth
-					/>
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={handleCloseDialog} color="primary">
-						Cancelar
-					</Button>
-					<Button onClick={handleSubmit} color="primary">
-						Agregar
-					</Button>
-				</DialogActions>
-				<Snackbar
-					open={snackbarOpen}
-					autoHideDuration={6000}
-					onClose={handleCloseSnackbar}
-				>
-					<SnackbarContent
-						message={successMessage || errorMessage}
-						style={{
-							backgroundColor: successMessage ? 'green' : 'red',
-						}}
-					/>
-				</Snackbar>
-			</Dialog>
+				<Paper aria-labelledby="form-dialog-title">
+					<DialogTitle id="form-dialog-title">
+						Agregar Usuario
+					</DialogTitle>
+					<DialogContent>
+						<TextField
+							autoFocus
+							margin="dense"
+							label="Nombre"
+							name="name"
+							value={userData.name}
+							onChange={handleChange}
+							fullWidth
+						/>
+						<TextField
+							margin="dense"
+							label="Apellido"
+							name="lastName"
+							value={userData.lastName}
+							onChange={handleChange}
+							fullWidth
+						/>
+						<TextField
+							margin="dense"
+							label="Edad"
+							name="age"
+							type="number"
+							value={userData.age}
+							onChange={handleChange}
+							fullWidth
+						/>
+						<TextField
+							margin="dense"
+							label="Email"
+							name="email"
+							type="email"
+							value={userData.email}
+							onChange={handleChange}
+							fullWidth
+						/>
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={handleCloseDialog} color="primary">
+							Cancelar
+						</Button>
+						<Button onClick={handleSubmit} color="primary">
+							Agregar
+						</Button>
+					</DialogActions>
+					<Snackbar
+						open={snackbarOpen}
+						autoHideDuration={6000}
+						onClose={handleCloseSnackbar}
+					>
+						<SnackbarContent
+							message={successMessage || errorMessage}
+							style={{
+								backgroundColor: successMessage
+									? 'green'
+									: 'red',
+							}}
+						/>
+					</Snackbar>
+				</Paper>
+			</div>
 		</>
 	);
 };

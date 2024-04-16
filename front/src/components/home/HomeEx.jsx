@@ -159,11 +159,8 @@ export const HomeEx = () => {
 						>
 							Agregar Usuario
 						</Button>
-						<AddUserEx
-							open={openDialog}
-							onClose={handleCloseDialog}
-							onSubmit={handleAddUser}
-						/>
+						{/* Ver como pasar la funcion onSumbit sin repetir todo el código en el otro componente */}
+						{/* <AddUserEx onSubmit={handleAddUser} /> */}
 						{loading && <p>Loading...</p>}
 						{error && <p>{error.message}</p>}
 						{data && (

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import useFormValidation from '../../hooks/useFormValidation';
 import {
 	Dialog,
 	DialogTitle,
@@ -25,50 +26,44 @@ export const EditUser = ({ user, open, onClose, onSubmit }) => {
 				email: '',
 		  };
 
-	const [userData, setUserData] = useState(initialUserData);
-	const [successMessage, setSuccessMessage] = useState('');
-	const [errorMessage, setErrorMessage] = useState('');
-	const [snackbarOpen, setSnackbarOpen] = useState(false);
-
-	useEffect(() => {
-		if (user) {
-			setUserData({
-				name: user.name || '',
-				lastName: user.lastName || '',
-				age: user.age || '',
-				email: user.email || '',
-			});
-		}
-	}, [user]);
-
-	const handleChange = (event) => {
-		const { name, value } = event.target;
-		setUserData({
-			...userData,
-			[name]: value,
-		});
-	};
+	const {
+		userData,
+		handleChange,
+		clearErrors,
+		resetForm,
+		validateForm,
+		showSuccessMessage,
+		showErrorMessage,
+		snackbarOpen,
+		snackbarMessage,
+		snackbarSeverity,
+		setSnackbarOpen,
+	} = useFormValidation(initialUserData);
 
 	const handleSubmit = async () => {
+		if (!validateForm()) {
+			return;
+		}
+
 		try {
 			await onSubmit({ id: user.id, ...userData });
-			setSuccessMessage('Usuario editado con éxito');
-			setErrorMessage('');
-			setSnackbarOpen(true);
+			showSuccessMessage('Usuario editado con éxito');
+			resetForm();
+			onClose();
 		} catch (error) {
 			console.error('Error al editar usuario:', error);
-			setErrorMessage('Error al editar usuario');
-			setSuccessMessage('');
-			setSnackbarOpen(true);
+			showErrorMessage('Error al editar usuario');
 		}
 	};
 
 	const handleCloseSnackbar = () => {
+		clearErrors();
 		setSnackbarOpen(false);
 	};
 
 	const handleCloseDialog = () => {
-		setUserData(initialUserData);
+		clearErrors();
+		resetForm();
 		onClose();
 	};
 
@@ -88,6 +83,7 @@ export const EditUser = ({ user, open, onClose, onSubmit }) => {
 					value={userData.name}
 					onChange={handleChange}
 					fullWidth
+					required
 				/>
 				<TextField
 					margin="dense"
@@ -96,6 +92,7 @@ export const EditUser = ({ user, open, onClose, onSubmit }) => {
 					value={userData.lastName}
 					onChange={handleChange}
 					fullWidth
+					required
 				/>
 				<TextField
 					margin="dense"
@@ -105,6 +102,7 @@ export const EditUser = ({ user, open, onClose, onSubmit }) => {
 					value={userData.age}
 					onChange={handleChange}
 					fullWidth
+					required
 				/>
 				<TextField
 					margin="dense"
@@ -114,6 +112,7 @@ export const EditUser = ({ user, open, onClose, onSubmit }) => {
 					value={userData.email}
 					onChange={handleChange}
 					fullWidth
+					required
 				/>
 			</DialogContent>
 			<DialogActions>
@@ -130,9 +129,10 @@ export const EditUser = ({ user, open, onClose, onSubmit }) => {
 				onClose={handleCloseSnackbar}
 			>
 				<SnackbarContent
-					message={successMessage || errorMessage}
+					message={snackbarMessage}
 					style={{
-						backgroundColor: successMessage ? 'green' : 'red',
+						backgroundColor:
+							snackbarSeverity === 'error' ? 'red' : 'green',
 					}}
 				/>
 			</Snackbar>
