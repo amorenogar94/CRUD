@@ -21,7 +21,7 @@ const styles = (theme) => ({
 		display: 'inline-flex',
 		justifyContent: 'center',
 	},
-	papeContainer: {
+	paperContainer: {
 		minWidth: 'fit-content',
 	},
 });
@@ -29,7 +29,7 @@ const styles = (theme) => ({
 const UserTable = ({ users, onEdit, onDelete, classes }) => {
 	return (
 		<div className={classes.tableWrapper}>
-			<Paper className={classes.papeContainer}>
+			<Paper className={classes.paperContainer}>
 				<Table className={classes.table} aria-label="user table">
 					<TableHead>
 						<TableRow>
