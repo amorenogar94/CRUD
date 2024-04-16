@@ -28,11 +28,11 @@ const styles = (theme) => ({
 
 const headers = [
 	{ label: 'ID', align: 'center', field: 'id' },
-	{ label: 'Name', align: 'center', field: 'name' },
-	{ label: 'Last Name', align: 'center', field: 'lastName' },
-	{ label: 'Age', align: 'center', field: 'age' },
+	{ label: 'Nombre', align: 'center', field: 'name' },
+	{ label: 'Apellido', align: 'center', field: 'lastName' },
+	{ label: 'Edad', align: 'center', field: 'age' },
 	{ label: 'Email', align: 'center', field: 'email' },
-	{ label: 'Actions', align: 'center', actions: true },
+	{ label: 'Gestión', align: 'center', actions: true },
 ];
 
 const UserTable = ({ users, onEdit, onDelete, classes }) => {
