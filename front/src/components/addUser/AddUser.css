@@ -1,0 +1,10 @@
+.content {
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 50px;
+}
+
+.wrapper {
+    min-height: 200px;
+    padding: 25px;
+}

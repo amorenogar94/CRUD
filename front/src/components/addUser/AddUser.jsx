@@ -1,17 +1,17 @@
 import React from 'react';
+import './AddUser.css';
 import useFormValidation from '../../hooks/useFormValidation';
 import {
-	Dialog,
-	DialogTitle,
-	DialogContent,
-	DialogActions,
 	Button,
 	TextField,
 	Snackbar,
 	SnackbarContent,
+	Paper,
 } from '@material-ui/core';
+import { Link } from 'react-router-dom';
+import useUserActions from '../../hooks/useUserActions';
 
-export const AddUser = ({ open, onClose, onSubmit }) => {
+const AddUser = () => {
 	const initialUserData = {
 		name: '',
 		lastName: '',
@@ -33,16 +33,17 @@ export const AddUser = ({ open, onClose, onSubmit }) => {
 		showErrorMessage,
 	} = useFormValidation(initialUserData);
 
+	const { handleAddUser } = useUserActions();
+
 	const handleSubmit = async () => {
 		if (!validateForm()) {
 			return;
 		}
 
 		try {
-			await onSubmit(userData);
+			await handleAddUser(userData);
 			showSuccessMessage('Usuario agregado con éxito');
 			resetForm();
-			onClose();
 		} catch (error) {
 			console.error('Error al agregar usuario:', error);
 			showErrorMessage('Error al agregar usuario');
@@ -53,20 +54,10 @@ export const AddUser = ({ open, onClose, onSubmit }) => {
 		clearErrors();
 	};
 
-	const handleCloseDialog = () => {
-		clearErrors();
-		resetForm();
-		onClose();
-	};
-
 	return (
-		<Dialog
-			open={open}
-			onClose={handleCloseDialog}
-			aria-labelledby="form-dialog-title"
-		>
-			<DialogTitle id="form-dialog-title">Agregar Usuario</DialogTitle>
-			<DialogContent>
+		<div className="content">
+			<Paper className="wrapper">
+				<h2>Agregar Usuario</h2>
 				<TextField
 					autoFocus
 					margin="dense"
@@ -108,28 +99,38 @@ export const AddUser = ({ open, onClose, onSubmit }) => {
 					error={!!emailError}
 					helperText={emailError}
 				/>
-			</DialogContent>
-			<DialogActions>
-				<Button onClick={handleCloseDialog} color="primary">
-					Cancelar
-				</Button>
-				<Button onClick={handleSubmit} color="primary">
-					Agregar
-				</Button>
-			</DialogActions>
-			<Snackbar
-				open={snackbarOpen}
-				autoHideDuration={6000}
-				onClose={handleCloseSnackbar}
-			>
-				<SnackbarContent
-					message={snackbarMessage}
-					style={{
-						backgroundColor:
-							snackbarSeverity === 'success' ? 'green' : 'red',
-					}}
-				/>
-			</Snackbar>
-		</Dialog>
+				<div className="form-actions">
+					<Button
+						onClick={handleSubmit}
+						variant="contained"
+						color="primary"
+					>
+						Agregar
+					</Button>
+					<Link to="/" className="cancel-button">
+						<Button variant="contained" color="default">
+							Cancelar
+						</Button>
+					</Link>
+				</div>
+				<Snackbar
+					open={snackbarOpen}
+					autoHideDuration={6000}
+					onClose={handleCloseSnackbar}
+				>
+					<SnackbarContent
+						message={snackbarMessage}
+						style={{
+							backgroundColor:
+								snackbarSeverity === 'success'
+									? 'green'
+									: 'red',
+						}}
+					/>
+				</Snackbar>
+			</Paper>
+		</div>
 	);
 };
+
+export default AddUser;

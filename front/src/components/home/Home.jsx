@@ -6,11 +6,11 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Paper from '@material-ui/core/Paper';
 import UserTable from '../userTable/UserTable';
-import { AddUser } from '../addUser/AddUser';
 import { EditUser } from '../editUser/EditUser';
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import useUserActions from '../../hooks/useUserActions';
+import { useNavigate } from 'react-router-dom';
 
 export const Home = () => {
 	const [openDialog, setOpenDialog] = useState(false);
@@ -20,13 +20,14 @@ export const Home = () => {
 		loading,
 		error,
 		deleteUser,
-		handleAddUser,
 		handleSubmitEditUser,
 		snackbarOpen,
 		snackbarSeverity,
 		snackbarMessage,
 		handleSnackbarClose,
 	} = useUserActions();
+
+	const navigate = useNavigate();
 
 	const handleEditUser = (user) => {
 		setEditUser(user);
@@ -39,12 +40,7 @@ export const Home = () => {
 	};
 
 	const handleAddUserClick = () => {
-		setOpenDialog(true);
-	};
-
-	const handleAddUserSubmit = (userData) => {
-		handleAddUser(userData);
-		setOpenDialog(false);
+		navigate('/add');
 	};
 
 	const handleEditUserSubmit = (editedUserData) => {
@@ -80,11 +76,6 @@ export const Home = () => {
 								Agregar Usuario
 							</Button>
 						</div>
-						<AddUser
-							open={openDialog}
-							onClose={handleCloseDialog}
-							onSubmit={handleAddUserSubmit}
-						/>
 						{loading && <p>Loading...</p>}
 						{error && <p>{error.message}</p>}
 						{data && (
