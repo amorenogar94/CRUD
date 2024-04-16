@@ -17,6 +17,10 @@ const styles = (theme) => ({
 	tableWrapper: {
 		overflowX: 'auto',
 	},
+	actionCell: {
+		display: 'inline-flex',
+		justifyContent: 'center',
+	},
 });
 
 const UserTable = ({ users, onEdit, onDelete, classes }) => {
@@ -49,21 +53,22 @@ const UserTable = ({ users, onEdit, onDelete, classes }) => {
 									{user.email}
 								</TableCell>
 								<TableCell align="center">
-									<IconButton
-										color="primary"
-										aria-label="edit user"
-										onClick={() => onEdit(user)}
-									>
-										<EditIcon />
-									</IconButton>
-									<IconButton
-										color="secondary"
-										aria-label="delete user"
-										onClick={() => onDelete(user.id)}
-										style={{ marginLeft: 8 }}
-									>
-										<DeleteIcon />
-									</IconButton>
+									<div className={classes.actionCell}>
+										<IconButton
+											color="primary"
+											aria-label="edit user"
+											onClick={() => onEdit(user)}
+										>
+											<EditIcon />
+										</IconButton>
+										<IconButton
+											color="secondary"
+											aria-label="delete user"
+											onClick={() => onDelete(user.id)}
+										>
+											<DeleteIcon />
+										</IconButton>
+									</div>
 								</TableCell>
 							</TableRow>
 						))}

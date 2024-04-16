@@ -11,6 +11,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import useUserActions from '../../hooks/useUserActions';
 import { useNavigate } from 'react-router-dom';
+import { CircularProgress } from '@material-ui/core';
 
 export const Home = () => {
 	const [openDialog, setOpenDialog] = useState(false);
@@ -49,7 +50,7 @@ export const Home = () => {
 	};
 
 	return (
-		<div className="home">
+		<div>
 			<AppBar position="static" color="default">
 				<Toolbar>
 					<Typography variant="h6" color="inherit">
@@ -57,14 +58,14 @@ export const Home = () => {
 					</Typography>
 				</Toolbar>
 			</AppBar>
-			<div className="content">
+			<div className="home__content">
 				<Paper>
-					<div className="wrapper">
-						<div className="header">
+					<div className="home__wrapper">
+						<div className="home__header">
 							<Typography
 								variant="title"
 								color="inherit"
-								className="title"
+								className="home__title"
 							>
 								Listado de usuarios
 							</Typography>
@@ -76,7 +77,11 @@ export const Home = () => {
 								Agregar Usuario
 							</Button>
 						</div>
-						{loading && <p>Loading...</p>}
+						{loading && (
+							<div className="home__loading">
+								<CircularProgress />
+							</div>
+						)}
 						{error && <p>{error.message}</p>}
 						{data && (
 							<UserTable

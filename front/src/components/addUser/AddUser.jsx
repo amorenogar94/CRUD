@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './AddUser.css';
 import useFormValidation from '../../hooks/useFormValidation';
 import {
@@ -7,8 +7,9 @@ import {
 	Snackbar,
 	SnackbarContent,
 	Paper,
+	Typography,
 } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import useUserActions from '../../hooks/useUserActions';
 
 const AddUser = () => {
@@ -34,19 +35,30 @@ const AddUser = () => {
 	} = useFormValidation(initialUserData);
 
 	const { handleAddUser } = useUserActions();
+	const navigate = useNavigate();
+
+	const [buttonDisabled, setButtonDisabled] = useState(false);
 
 	const handleSubmit = async () => {
-		if (!validateForm()) {
+		if (!validateForm() || buttonDisabled) {
 			return;
 		}
+
+		setButtonDisabled(true);
 
 		try {
 			await handleAddUser(userData);
 			showSuccessMessage('Usuario agregado con éxito');
 			resetForm();
+			setTimeout(() => {
+				setButtonDisabled(true);
+				navigate('/');
+			}, 1000);
 		} catch (error) {
 			console.error('Error al agregar usuario:', error);
 			showErrorMessage('Error al agregar usuario');
+		} finally {
+			// setButtonDisabled(false);
 		}
 	};
 
@@ -54,10 +66,28 @@ const AddUser = () => {
 		clearErrors();
 	};
 
+	useEffect(() => {
+		return () => {
+			setButtonDisabled(false);
+		};
+	}, []);
+
 	return (
-		<div className="content">
-			<Paper className="wrapper">
-				<h2>Agregar Usuario</h2>
+		<div className="addUser__content">
+			<Paper className="addUser__wrapper">
+				<div className="addUser__header">
+					<Typography
+						variant="title"
+						color="inherit"
+						className="addUser__title"
+					>
+						Agregar usuario
+					</Typography>
+					<Link to="/">
+						<Button color="primary">Volver</Button>
+					</Link>
+				</div>
+
 				<TextField
 					autoFocus
 					margin="dense"
@@ -77,6 +107,7 @@ const AddUser = () => {
 					fullWidth
 					required
 				/>
+
 				<TextField
 					margin="dense"
 					label="Edad"
@@ -99,16 +130,21 @@ const AddUser = () => {
 					error={!!emailError}
 					helperText={emailError}
 				/>
-				<div className="form-actions">
+				<div className="addUser__buttons">
 					<Button
 						onClick={handleSubmit}
 						variant="contained"
 						color="primary"
+						disabled={buttonDisabled}
 					>
 						Agregar
 					</Button>
-					<Link to="/" className="cancel-button">
-						<Button variant="contained" color="default">
+					<Link to="/">
+						<Button
+							variant="contained"
+							color="default"
+							disabled={buttonDisabled}
+						>
 							Cancelar
 						</Button>
 					</Link>

@@ -1,20 +1,29 @@
-.content {
-    width: 80%;
+.home__content {
     margin: 0 auto;
     margin-top: 50px;
+    width: 80%;
 }
 
-.wrapper {
+.home__wrapper {
     min-height: 200px;
     padding: 25px;
+    position: relative;
 }
 
-.header {
+.home__header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
-.title {
+.home__title {
     display: inline;
+}
+
+.home__loading {
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2
 }

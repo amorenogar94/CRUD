@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
 
 const useUserActions = () => {
-	const [snackbarOpen, setSnackbarOpen] = useState(false);
-	const [snackbarMessage, setSnackbarMessage] = useState('');
-	const [snackbarSeverity, setSnackbarSeverity] = useState('success');
 	const [data, setData] = useState(null);
+	const [loading, setLoading] = useState(false);
+	const [snackbarMessage, setSnackbarMessage] = useState('');
+	const [snackbarOpen, setSnackbarOpen] = useState(false);
+	const [snackbarSeverity, setSnackbarSeverity] = useState('success');
 
 	const fetchData = async () => {
 		try {
+			setLoading(true);
 			const response = await fetch('http://localhost:9090/users/', {
 				method: 'GET',
 			});
@@ -18,11 +20,14 @@ const useUserActions = () => {
 			setData(jsonData);
 		} catch (error) {
 			console.error('Error fetching data:', error);
+		} finally {
+			setLoading(false);
 		}
 	};
 
 	const handleAction = async (url, method, body, successMessage) => {
 		try {
+			setLoading(true);
 			const options = {
 				method: method,
 				headers: {
@@ -55,6 +60,8 @@ const useUserActions = () => {
 				`Error ${method === 'GET' ? 'fetching' : 'updating'} data`
 			);
 			setSnackbarOpen(true);
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -75,7 +82,6 @@ const useUserActions = () => {
 			userData,
 			'Usuario agregado con éxito'
 		);
-		fetchData();
 	};
 
 	const handleSubmitEditUser = async (editedUserData) => {
@@ -106,6 +112,7 @@ const useUserActions = () => {
 		snackbarSeverity,
 		handleSnackbarClose,
 		data,
+		loading,
 	};
 };
 

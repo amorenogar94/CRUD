@@ -1,10 +1,28 @@
-.content {
+.addUser__content {
     width: 80%;
     margin: 0 auto;
     margin-top: 50px;
 }
 
-.wrapper {
+.addUser__wrapper {
     min-height: 200px;
     padding: 25px;
+}
+
+.addUser__header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.addUser__title {
+    display: inline;
+}
+
+.addUser__buttons {
+    margin-top: 16px;
+    display: inline-flex;
+    gap: 20px;
+    width: 100%;
+    justify-content: end;
 }
